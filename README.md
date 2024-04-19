@@ -165,3 +165,7 @@ window.saveText = function(text, name) {
 
 ## 后言
 开发这个主要是怕一些网站随时关停了，数据就没了，好留个备份，仅供学习使用
+
+## 在线体验地址
+[https://dhjz.github.io/spider](https://dhjz.github.io/spider)  
+- 源码详见[https://github.com/dhjz/spider](https://github.com/dhjz/spider)
