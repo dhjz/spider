@@ -8,14 +8,14 @@
 </head>
 <body>
   <div id="app">
-    <div style="width: 90%; max-width: 1500px; margin:0 auto; margin-top: 30px;"  v-cloak>
+    <div style="width: 90%; max-width: 1500px; margin:0 auto; margin-top: 30px;" class=""  v-cloak>
       <div class="form">
         <div class="form-item">采集的时候会将代采集地址拼接到代理地址后面再请求</div>
         <div class="form-item">
-          <label for="">代理地址:</label><input type="text" v-model="form.proxyUrl" style="width:600px;">
+          <label for="">代理地址:</label><input autocomplete="autocomplete" type="text" v-model="form.proxyUrl" style="width:600px;">
         </div>
         <div class="form-item">
-          <label for="">采集地址:</label><input type="text" v-model="form.url" style="width:600px;" @blur="getFields">
+          <label for="">采集地址:</label><input autocomplete="autocomplete" type="text" v-model="form.url" style="width:600px;">
         </div>
         <!-- <div class="form-item">
           <label for="">设置编码:</label>
@@ -25,26 +25,26 @@
           </select>
         </div> -->
         <!-- <div class="form-item">
-          <label for="">列表选择器:</label><input type="text" v-model="form.listSelector" />
+          <label for="">列表选择器:</label><input autocomplete="autocomplete" type="text" v-model="form.listSelector" />
         </div> -->
         <div class="flex">
           <div class="form-item">
-            <label for="">文章 a标签选择器:</label><input type="text" v-model="form.articlelSelector" />
+            <label for="">文章 a标签选择器:</label><input autocomplete="autocomplete" type="text" v-model="form.articlelSelector" />
           </div>
           <div class="form-item">
-            <label for="">文章内正文选择器:</label><input type="text" v-model="form.contSelector" />
+            <label for="">文章内正文选择器:</label><input autocomplete="autocomplete" type="text" v-model="form.contSelector" />
           </div>
         </div>
         <div class="flex">
           <div class="form-item">
-            <label for="">文章内标题选择器:</label><input type="text" v-model="form.titleSelector" placeholder="为空则取列表页标题" />
+            <label for="">文章内标题选择器:</label><input autocomplete="autocomplete" type="text" v-model="form.titleSelector" placeholder="为空则取列表页标题" />
           </div>
           <div class="form-item">
-            <label for="">文章内日期选择器:</label><input type="text" v-model="form.dateSelector"/>
+            <label for="">文章内日期选择器:</label><input autocomplete="autocomplete" type="text" v-model="form.dateSelector"/>
           </div>
         </div>
         <div class="form-item">
-          <label for="">文章内容删除, |隔开:</label><input type="text" v-model="form.contDel"/>
+          <label for="">文章内容删除, |隔开:</label><input autocomplete="autocomplete" type="text" v-model="form.contDel"/>
         </div>
         <div class="flex">
           <div class="form-item">
@@ -55,7 +55,7 @@
             </select>
           </div>
           <div class="form-item" v-show="form.isText == '0'">
-            <label for="">保留标签,逗号隔开:</label><input type="text" v-model.trim="form.tags"/>
+            <label for="">保留标签,逗号隔开:</label><input autocomplete="autocomplete" type="text" v-model.trim="form.tags"/>
           </div>
         </div>
         <div class="form-item">
@@ -66,25 +66,33 @@
           </select>
         </div>
         <div class="form-item" v-show="form.isPage == '1'">
-          <label for="">分页地址,数字用{ID}:</label><input type="text" v-model="form.pageUrl" style="width:520px;">
+          <label for="">分页地址,数字用{ID}:</label><input autocomplete="autocomplete" type="text" v-model="form.pageUrl" style="width:520px;">
         </div>
         <div class="flex">
           <div class="form-item" v-show="form.isPage == '1'">
-            <label for="">起始页码:</label><input type="text" v-model="form.pageStart" style="width: 100px;" />
+            <label for="">起始页码:</label><input autocomplete="autocomplete" type="text" v-model="form.pageStart" style="width: 100px;" />
           </div>
           <div class="form-item" v-show="form.isPage == '1'">
-            <label for="">结束页码:</label><input type="text" v-model="form.pageEnd" style="width: 100px;"/>
+            <label for="">结束页码:</label><input autocomplete="autocomplete" type="text" v-model="form.pageEnd" style="width: 100px;"/>
           </div>
           <div class="form-item">
-            <label for="">采集延迟ms:</label><input type="text" v-model.number="form.delay" style="width: 100px;" />
+            <label for="">采集延迟ms:</label><input autocomplete="autocomplete" type="text" v-model.number="form.delay" style="width: 100px;" />
+          </div>
+
+          <div class="history-box" v-if="caches && caches.length">
+            <div class="history-title">缓存记录（点击使用）：</div>
+            <div class="history-item" v-for="(item, ind) in caches" @click="useCache(item)">
+              {{ getCacheName(item) }}
+              <span @click="delCache(item, ind)">&times;</span>
+            </div>
           </div>
         </div>
         <div class="form-item">
           <label for="">内容自定义:</label>
           <div class="inline">
             <div class="mb8" v-for="(item, ind) in form.fields">
-              <input type="text" v-model.number="item.key" style="width: 126px; margin-right: 8px;" placeholder="字段名" />
-              <input type="text" v-model.number="item.val" style="margin-right: 8px;"  placeholder="内容页筛选器" />
+              <input autocomplete="autocomplete" type="text" v-model.number="item.key" style="width: 126px; margin-right: 8px;" placeholder="字段名" />
+              <input autocomplete="autocomplete" type="text" v-model.number="item.val" style="margin-right: 8px;"  placeholder="内容页筛选器" />
             </div>
             <div class="mb8">
               <button success @click="addField">添加</button><button danger @click="delField">删除</button>

@@ -36,6 +36,7 @@ table tr th { background: #f5f7fa; color: #909399; font-weight: bold; border: 1p
 table tr td { border: 1px solid #ebeef5; padding: 8px 4px; text-align: center; }
 table tr:hover { background-color: #f5f7fa; }
 
+.form { position: relative; }
 label { line-height: var(--input-height); display: inline-block; margin-right: 8px; }
 .form-item { margin-bottom: 10px; display: flex; align-items: flex-start; margin-right: 20px; }
 
@@ -56,3 +57,8 @@ input:not([type="radio"]), select { width: 320px; }
 .dialog-close { position: absolute; top: 0; right: -20px; width: 20px; line-height: 20px; background: #ccc; font-size: 16px; text-align: center; border-radius: 50%; cursor: pointer; }
 .dialog-cont{position:relative; margin:0 auto; width:60%; margin-top:15vh; background:#fff; border-radius:6px; box-shadow:0 1px 3px rgb(0 0 0 / 30%); 
   box-sizing:border-box; padding:20px; max-height:80vh; overflow-y:auto; }
+
+.history-box { position: absolute; right: 0; top: 0; width: 300px; height: 400px; overflow: auto; padding: 6px; border: 1px solid #ccc; border-radius: 6px; }
+.history-item { padding: 3px 12px 3px 6px; border: 1px solid #ccc; border-radius: 4px; margin: 5px 0; cursor: pointer; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; }
+.history-item span { position: absolute; top: 0px; right: 0px; font-size: 14px; color: #f63; display: none; line-height: 1; padding: 2px; }
+.history-item:hover span { display: block; }

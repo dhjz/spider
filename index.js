@@ -1,4 +1,5 @@
 const { createApp } = Vue
+const STORAGE_KEY = 'spider_store'
   
 createApp({
   data() {
@@ -38,7 +39,8 @@ createApp({
       dialogHtml: '',
       dialogShow: false,
       spideCurr: 0,
-      spideTotal: 0
+      spideTotal: 0,
+      caches: []
     }
   },
   created() {
@@ -56,16 +58,39 @@ createApp({
     // })
   },
   methods: {
+    useCache(item) {
+      this.form = { ...item }
+    },
+    delCache(item, ind) {
+      this.caches.splice(ind, 1)
+      setStorage(STORAGE_KEY, [...this.caches].reverse())
+    },
+    getCacheName(item) {
+      return new URL(item.url).host.replaceAll('.', '_')
+    },
     getFields() {
       if (!this.form.url) return
-      let key = new URL(this.form.url).host.replaceAll('.', '')
-      const fields = getStorage(key)
-      if (fields && fields.length) this.form.fields = fields
+      let caches = getStorage(STORAGE_KEY)
+      if (!caches || !caches.length) return
+      this.form = { ...caches[caches.length - 1] }
+      this.caches = caches.reverse()
     },
     saveFields() {
       if (!this.form.url) return
-      let key = new URL(this.form.url).host.replaceAll('.', '')
-      setStorage(key, this.form.fields || '')
+      let caches = getStorage(STORAGE_KEY)
+      let temp = null
+      if (!caches) {
+        caches = []
+      } else if (caches.length) {
+        temp = caches[caches.length - 1]
+      }
+      if (temp && temp.url == this.form.url) {
+        Object.assign(temp, this.form)
+      } else {
+        caches.push({ ...this.form })
+      }
+      setStorage(STORAGE_KEY, caches)
+      this.caches = caches.reverse()
     },
     previewList() {
       this.dataList = []
@@ -196,12 +221,12 @@ function getContData(options) {
         if (options.contDel) {
           options.contDel.split('|').forEach(item => cont = cont.replace(new RegExp(item, 'ig'), ''))
         }
-        const title = options.titleSelector ? res.data.querySelector(options.titleSelector)?.innerText : null
+        const title = options.titleSelector ? res.data.querySelector(options.titleSelector)?.innerText.replaceAll('\n', '').replaceAll('\r', '') : null
         const date = options.dateSelector ? res.data.querySelector(options.dateSelector)?.innerText : null
         const result = { title, cont, date }
         if (options.fields && options.fields.length) {
           options.fields.filter(x => x.key && x.val).forEach(x => {
-            result[x.key] = res.data.querySelector(x.val)?.innerText || ''
+            result[x.key] = res.data.querySelector(x.val)?.innerText.replaceAll('\n', '') || ''
           })
         }
         // result = result.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // 删除所有script标签
